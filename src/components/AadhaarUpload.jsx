@@ -41,7 +41,7 @@ export default function AadhaarUpload() {
     formData.append("aadhaarBack", backFile);
 
     try {
-      const response = await axios.post("https://aadhaar-ocr-backend-g1c6.onrender.com/api/upload", formData, {
+      const response = await axios.post(`${process.env.URI}/api/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setData(response.data.data);
