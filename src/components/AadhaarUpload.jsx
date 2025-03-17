@@ -44,6 +44,7 @@ export default function AadhaarUpload() {
       const response = await axios.post('https://aadhaar-ocr-backend-g1c6.onrender.com/api/upload', formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      console.log(response,"response");
       setData(response.data.data);
       toast.success("OCR Completed Successfully!");
     } catch (error) {
