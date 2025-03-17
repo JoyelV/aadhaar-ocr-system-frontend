@@ -41,7 +41,7 @@ export default function AadhaarUpload() {
     formData.append("aadhaarBack", backFile);
 
     try {
-      const response = await axios.post('http://localhost/5001/api/upload', formData, {
+      const response = await axios.post(`${process.env.BACKEND_URI}/api/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       console.log(response,"response");
