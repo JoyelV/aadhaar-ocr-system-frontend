@@ -22,6 +22,7 @@ export default function AadhaarUpload() {
   const [frontPreview, setFrontPreview] = useState(null);
   const [backPreview, setBackPreview] = useState(null);
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e, setFile, setPreview) => {
     const file = e.target.files[0];
@@ -36,6 +37,8 @@ export default function AadhaarUpload() {
       toast.error("Upload both front and back images");
       return;
     }
+    setLoading(true); // Show processing state
+
     const formData = new FormData();
     formData.append("aadhaarFront", frontFile);
     formData.append("aadhaarBack", backFile);
@@ -49,6 +52,8 @@ export default function AadhaarUpload() {
       toast.success("OCR Completed Successfully!");
     } catch (error) {
       toast.error("Error Extracting data!");
+    }finally{
+      setLoading(false); // Show processing state
     }
   };
 
@@ -64,7 +69,14 @@ export default function AadhaarUpload() {
           { preview: backPreview, setFile: setBackFile, setPreview: setBackPreview, label: "Upload Back" }].map((item, index) => (
             <div key={index} className="upload-area">
               {item.preview ? (
+                <>
                 <img src={item.preview} alt={`${item.label} Preview`} className="preview" />
+                <label className="upload-label">
+                  <FaCloudUploadAlt className="icon" />
+                  <p>{item.label}</p>
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, item.setFile, item.setPreview)} />
+                </label>
+                </>
               ) : (
                 <label className="upload-label">
                   <FaCloudUploadAlt className="icon" />
@@ -75,7 +87,10 @@ export default function AadhaarUpload() {
             </div>
           ))}
         </div>
-        <button onClick={handleUpload} className="upload-button">Parse Aadhaar</button>
+        {/* <button onClick={handleUpload} className="upload-button">Parse Aadhaar</button> */}
+        <button onClick={handleUpload} className="upload-button" disabled={loading}>
+          {loading ? "Processing..." : "Parse Aadhaar"}
+        </button>
       </div>
       {data ? (
         <div className="data-box">
