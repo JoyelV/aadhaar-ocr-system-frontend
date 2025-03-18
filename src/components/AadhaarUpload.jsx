@@ -6,7 +6,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import "./AadhaarUpload.css";
 
 const allowedFormats = ["image/jpeg", "image/jpg", "image/png"];
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const fieldMappings = {
   "Aadhaar Number": "aadhaarNumber",
@@ -61,7 +61,7 @@ export default function AadhaarUpload() {
 
     try {
       const response = await axios.post(
-        `https://aadhaar-ocr-backend-g1c6.onrender.com/api/upload`,
+        `${process.env.BACKEND_URL}/api/upload`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
