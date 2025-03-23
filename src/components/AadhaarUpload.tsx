@@ -5,10 +5,25 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import "./AadhaarUpload.css";
 
-const allowedFormats = ["image/jpeg", "image/jpg", "image/png"];
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const allowedFormats: string[] = ["image/jpeg", "image/jpg", "image/png"];
+const MAX_FILE_SIZE: number = 5 * 1024 * 1024;
 
-const fieldMappings = {
+type FieldMappings = {
+  [key: string]: string;
+};
+
+type AadhaarData = {
+  aadhaarNumber?: string;
+  name?: string;
+  dob?: string;
+  gender?: string;
+  address?: string;
+  pinCode?: string;
+  district?: string;
+  state?: string;
+};
+
+const fieldMappings: FieldMappings = {
   "Aadhaar Number": "aadhaarNumber",
   "Name as in Aadhaar": "name",
   "D.O.B": "dob",
@@ -16,26 +31,31 @@ const fieldMappings = {
   "Address": "address",
   "Pin code": "pinCode",
   "District": "district",
-  "State": "state"
+  "State": "state",
 };
 
-export default function AadhaarUpload() {
-  const [frontFile, setFrontFile] = useState(null);
-  const [backFile, setBackFile] = useState(null);
-  const [frontPreview, setFrontPreview] = useState(null);
-  const [backPreview, setBackPreview] = useState(null);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+const AadhaarUpload: React.FC = () => {
+  const [frontFile, setFrontFile] = useState<File | null>(null);
+  const [backFile, setBackFile] = useState<File | null>(null);
+  const [frontPreview, setFrontPreview] = useState<string | null>(null);
+  const [backPreview, setBackPreview] = useState<string | null>(null);
+  const [data, setData] = useState<AadhaarData | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const validateFile = (file) => {
+  const validateFile = (file: File | null): string | null => {
     if (!file) return "File is required.";
-    if (!allowedFormats.includes(file.type)) return "Invalid file format. Only JPG, JPEG, and PNG allowed.";
+    if (!allowedFormats.includes(file.type))
+      return "Invalid file format. Only JPG, JPEG, and PNG allowed.";
     if (file.size > MAX_FILE_SIZE) return "File size exceeds 5MB.";
     return null;
   };
 
-  const handleFileChange = (e, setFile, setPreview) => {
-    const file = e.target.files[0];
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFile: React.Dispatch<React.SetStateAction<File | null>>,
+    setPreview: React.Dispatch<React.SetStateAction<string | null>>
+  ) => {
+    const file = e.target.files?.[0] || null;
     const validationError = validateFile(file);
 
     if (validationError) {
@@ -44,7 +64,7 @@ export default function AadhaarUpload() {
     }
 
     setFile(file);
-    setPreview(URL.createObjectURL(file));
+    setPreview(file ? URL.createObjectURL(file) : null);
   };
 
   const handleUpload = async () => {
@@ -54,13 +74,12 @@ export default function AadhaarUpload() {
     }
 
     setLoading(true);
-
     const formData = new FormData();
     formData.append("aadhaarFront", frontFile);
     formData.append("aadhaarBack", backFile);
 
     try {
-      const response = await axios.post(
+      const response = await axios.post<{ data: AadhaarData }>(
         `${process.env.BACKEND_URL}/api/upload`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
@@ -68,7 +87,7 @@ export default function AadhaarUpload() {
 
       setData(response.data.data);
       toast.success("OCR Completed Successfully!");
-    } catch (error) {
+    } catch (error: any) {
       if (error.response) {
         toast.error(`Error: ${error.response.data.message || "Server error"}`);
       } else {
@@ -94,14 +113,14 @@ export default function AadhaarUpload() {
                 <>
                   <img src={item.preview} alt={`${item.label} Preview`} className="preview" />
                   <label className="upload-label">
-                    <FaCloudUploadAlt className="icon" />
+                  <FaCloudUploadAlt {...({ className: "icon" } as any)} />
                     <p>{item.label}</p>
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, item.setFile, item.setPreview)} />
                   </label>
                 </>
               ) : (
                 <label className="upload-label">
-                  <FaCloudUploadAlt className="icon" />
+                  <FaCloudUploadAlt {...({ className: "icon" } as any)} />
                   <p>{item.label}</p>
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, item.setFile, item.setPreview)} />
                 </label>
@@ -120,7 +139,7 @@ export default function AadhaarUpload() {
             {Object.entries(fieldMappings).map(([label, key], index) => (
               <div key={index} className="data-field">
                 <label className="data-label">{label}:</label>
-                <span className="data-value">{data[key] || "N/A"}</span>
+                <span className="data-value">{data[key as keyof AadhaarData] || "N/A"}</span>
               </div>
             ))}
           </div>
@@ -133,4 +152,6 @@ export default function AadhaarUpload() {
       )}
     </div>
   );
-}
+};
+
+export default AadhaarUpload;
