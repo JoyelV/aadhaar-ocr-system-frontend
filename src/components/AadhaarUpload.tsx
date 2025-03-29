@@ -80,7 +80,7 @@ const AadhaarUpload: React.FC = () => {
 
     try {
       const response = await axios.post<{ data: AadhaarData }>(
-        `${process.env.BACKEND_URL}/api/upload`,
+        `https://aadhaar-ocr-backend-g1c6.onrender.com/api/upload`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -154,4 +154,4 @@ const AadhaarUpload: React.FC = () => {
   );
 };
 
-export default AadhaarUpload;
+export default AadhaarUpload; 
