@@ -1,5 +1,5 @@
 import { ToastContainer } from "react-toastify";
-import AadhaarUpload from "./components/AadhaarUpload";
+import AadhaarUpload from "./components/AadhaarUpload/AadhaarUpload";
 import "react-toastify/dist/ReactToastify.css";
 import React from "react";
 

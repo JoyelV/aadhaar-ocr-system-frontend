@@ -1,0 +1,238 @@
+.pageWrapper {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px; /* Increased to accommodate side-by-side layout */
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex; /* Use flexbox for side-by-side layout */
+  flex-direction: row;
+  gap: 20px;
+  text-align: left;
+}
+
+.uploadSectionWrapper {
+  flex: 1; /* Take up 50% of the container */
+  min-width: 300px;
+}
+
+.uploadBox {
+  padding: 0;
+}
+
+.uploadGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.uploadArea {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.uploadArea:hover {
+  border-color: #007bff;
+}
+
+.uploadLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadLabel p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.icon {
+  font-size: 30px;
+  color: #555;
+}
+
+.preview {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+.uploadButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.uploadButton:hover {
+  background-color: #0056b3;
+}
+
+.apiResponseWrapper {
+  flex: 1; /* Take up 50% of the container */
+  min-width: 300px;
+}
+
+.apiResponse {
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  text-align: center;
+  height: 100%; /* Ensure it takes full height of the parent */
+}
+
+.apiResponse h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.apiResponse p {
+  font-size: 14px;
+  color: #666;
+}
+
+.dataBox {
+  padding: 0;
+  background: none;
+}
+
+.dataGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dataField {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+}
+
+.dataLabel {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.dataValue {
+  font-size: 14px;
+  color: #666;
+}
+
+.dataTitle {
+  display: none;
+}
+
+/* Mobile screens (up to 600px) */
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column; /* Stack vertically on mobile */
+    width: 95%;
+    padding: 10px;
+  }
+
+  .uploadSectionWrapper,
+  .apiResponseWrapper {
+    flex: none;
+    width: 100%;
+  }
+
+  .uploadButton {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .apiResponse h3 {
+    font-size: 14px;
+  }
+
+  .apiResponse p,
+  .dataLabel,
+  .dataValue {
+    font-size: 12px;
+  }
+}
+
+/* Tablet screens (601px - 1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .container {
+    width: 85%;
+    flex-direction: row; /* Keep side-by-side layout */
+  }
+
+  .uploadSectionWrapper,
+  .apiResponseWrapper {
+    min-width: 250px;
+  }
+}
+
+/* Desktop screens (above 1024px) */
+@media (min-width: 1025px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+/* Optional Utility & Loader */
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.mt1 {
+  margin-top: 1rem;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
