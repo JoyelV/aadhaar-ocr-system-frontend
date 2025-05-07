@@ -4,11 +4,10 @@ import styles from "../../components/AadhaarUpload/AadhaarUpload.module.css";
 
 interface Props {
   data: AadhaarData;
-  extractTextAfterSIO: (text: string) => string; // Add the function as a prop
+  extractTextAfterSIO: (text: string) => string; 
 }
 
 const ParsedDataView: React.FC<Props> = ({ data, extractTextAfterSIO }) => {
-  // Assuming the address field contains the text with "SIO"
   const address = data.address || "EE en Em N aR Rafts gga Sifter As 4 URGuEIGEnCationAuhoRty of India ZZ KAGHAAR Address EE oe or TE aE SIO K X Varghese, Komaroth House, Pattath ai mer ei any, ER Road, Chalikkavattom, Vennala, PO re SVennala";
   const textAfterSIO = extractTextAfterSIO(address);
 
