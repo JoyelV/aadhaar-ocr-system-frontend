@@ -52,7 +52,7 @@ const AadhaarUpload: React.FC = () => {
         toast.error("Uploaded image doesn't appear to be an Aadhaar card.");
         return;
       }
-      console.log("Parsed Data:", result); // Debug log to check the data
+      console.log("Parsed Data:", result); 
       setData(result);
       toast.success("OCR Completed Successfully!");
     } catch (error: any) {
