@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post(`${process.env.BACKEND_URL}/auth/login`, { email, password });
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/login`, { email, password });
       setToken(response.data.token);
       localStorage.setItem('token', response.data.token);
     } catch (error: any) {
@@ -32,7 +32,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const register = async (email: string, password: string) => {
     try {
-      await axios.post(`${process.env.BACKEND_URL}/auth/register`, { email, password });
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/register`, { email, password });
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Registration failed');
     }
