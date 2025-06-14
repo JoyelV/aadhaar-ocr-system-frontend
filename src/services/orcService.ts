@@ -15,7 +15,7 @@ export const uploadAadhaar = async (frontFile: File, backFile: File) => {
   const token = localStorage.getItem('token');
 
   try {
-    const response = await axios.post(`${API_URL}/upload-aadhaar`, formData, {
+    const response = await axios.post(`${API_URL}/api/upload-aadhaar`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${token}`
