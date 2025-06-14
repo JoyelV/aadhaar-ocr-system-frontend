@@ -1,0 +1,160 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #f9fafb;
+  min-height: calc(100vh - 64px); /* Adjust for navbar height */
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeIn 1s ease-in;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stepCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.stepCard:hover {
+  transform: translateY(-5px);
+}
+
+.stepIcon {
+  font-size: 2.5rem;
+  color: #3b82f6;
+  margin-bottom: 1rem;
+}
+
+.stepTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.stepDescription {
+  color: #6b7280;
+}
+
+.scansGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.scanCard {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.scanCard:hover {
+  transform: translateY(-5px);
+}
+
+.scanImage {
+  width: 100px;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.scanDetails {
+  flex: 1;
+}
+
+.scanTitle {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.scanDate {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.viewLink {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.viewLink:hover {
+  text-decoration: underline;
+}
+
+.loading {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.125rem;
+}
+
+.noScans {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.125rem;
+}
+
+/* Existing styles remain unchanged */
+.error {
+  color: #ef4444;
+  font-size: 0.875rem;
+}
+
+.scanDetails p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0;
+}
+
+.scanDetails p strong {
+  color: #1f2937;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

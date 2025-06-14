@@ -1,25 +1,31 @@
-import React from "react";
-import { FaCloudUploadAlt } from "react-icons/fa";
-import styles from "./AadhaarUpload.module.css";
+import React from 'react';
+import styles from './UploadSection.module.css';
 
 interface UploadSectionProps {
   label: string;
   preview: string | null;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-const Icon = FaCloudUploadAlt as React.FC<React.SVGProps<SVGSVGElement>>;
 
-const UploadSection: React.FC<UploadSectionProps> = ({ label, preview, onFileChange }) => (
-  <div className={styles.uploadArea}>
-    {preview ? (
-      <img src={preview} alt={`${label} Preview`} className={styles.preview} />
-    ) : null}
-    <label className={styles.uploadLabel}>
-    <Icon className={styles.icon} />
-    <p>{label}</p>
-      <input type="file" accept="image/*" className={styles.hidden} onChange={onFileChange} />
-    </label>
-  </div>
-);
+const UploadSection: React.FC<UploadSectionProps> = ({ label, preview, onFileChange }) => {
+  const inputName = label === 'Aadhaar Front' ? 'front' : 'back';
 
-export default UploadSection; 
+  return (
+    <div className={styles.uploadSection}>
+      <label className={styles.uploadLabel}>{label}</label>
+      <div className={styles.uploadArea}>
+        <p>Click to select or drag & drop file</p>
+        <input
+          type="file"
+          name={inputName}
+          accept="image/*"
+          onChange={onFileChange}
+          className={styles.fileInput}
+        />
+      </div>
+      {preview && <img src={preview} alt={`${label} Preview`} className={styles.previewImage} />}
+    </div>
+  );
+};
+
+export default UploadSection;

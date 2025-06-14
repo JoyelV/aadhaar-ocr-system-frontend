@@ -1,18 +1,29 @@
-import axios from "axios";
-import { AadhaarData } from "../types/Aadhaar";
+import axios from 'axios';
 
-export const uploadAadhaar = async (front: File, back: File): Promise<AadhaarData> => {
+const API_URL = 'http://localhost:5001/api';
+
+export const uploadAadhaar = async (frontFile: File, backFile: File) => {
   const formData = new FormData();
-  formData.append("aadhaarFront", front);
-  formData.append("aadhaarBack", back);
+  formData.append('front', frontFile);
+  formData.append('back', backFile);
 
-  const response = await axios.post<{ data: AadhaarData }>(
-    `https://aadhaar-ocr-backend-g1c6.onrender.com/api/upload`,
-    formData,
-    {
-      headers: { "Content-Type": "multipart/form-data" },
-    }
-  );
+  // Debug: Log FormData keys
+  for (const pair of formData.entries()) {
+    console.log(`FormData field: ${pair[0]}, File: ${pair[1]}`);
+  }
 
-  return response.data.data;
+  const token = localStorage.getItem('token');
+
+  try {
+    const response = await axios.post(`${API_URL}/upload-aadhaar`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('Upload Error:', error.message, error.code);
+    throw error;
+  }
 };

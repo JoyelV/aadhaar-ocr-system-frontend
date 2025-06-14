@@ -31,36 +31,49 @@ const AadhaarUpload: React.FC = () => {
     setPreview(file ? URL.createObjectURL(file) : null);
   };
 
-  const handleUpload = async () => {
-    if (!frontFile || !backFile) {
-      toast.error("Upload both front and back images.");
+const handleUpload = async () => {
+  if (!frontFile || !backFile) {
+    toast.error('Both front and back Aadhaar images needed. No cat selfies or butter chicken, please!');
+    return;
+  }
+
+  try {
+    setLoading(true);
+    const result = await uploadAadhaar(frontFile, backFile);
+
+    // Validate response structure
+    if (
+      !result ||
+      typeof result.name !== 'string' ||
+      typeof result.aadhaarNumber !== 'string' ||
+      typeof result.dob !== 'string' ||
+      typeof result.gender !== 'string' ||
+      typeof result.address !== 'string' ||
+      typeof result.pinCode !== 'string'
+    ) {
+      toast.error('Invalid Aadhaar data. Try actual Aadhaar cards, not your dinner plate!');
       return;
     }
-  
-    try {
-      setLoading(true);
-      const result = await uploadAadhaar(frontFile, backFile);
-      const extractedText = JSON.stringify(result).toLowerCase(); 
-  
-      const hasAadhaarKeywords =
-        extractedText.includes("government of india") ||
-        extractedText.includes("uidai") ||
-        extractedText.includes("aadhaar") ||
-        /\b\d{4}\s\d{4}\s\d{4}\b/.test(extractedText); 
-  
-      if (!hasAadhaarKeywords) {
-        toast.error("Uploaded image doesn't appear to be an Aadhaar card.");
-        return;
-      }
-      console.log("Parsed Data:", result); 
-      setData(result);
-      toast.success("OCR Completed Successfully!");
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Upload failed.");
-    } finally {
-      setLoading(false);
+
+    if (Object.values(result).some(value => value === 'Not Found')) {
+      toast.warn('Clearer Aadhaar images, please—no blurry curry shots!');
+    } else {
+      toast.success('Aadhaar nailed it!!');
     }
-  };  
+    setData(result);
+  } catch (error: any) {
+    const errorMessage = error?.response?.data?.message || 'Processing failed. Upload valid Aadhaar images!';
+    if (errorMessage.includes('QR code')) {
+      toast.error('No QR code found. Aadhaar cards have QR codes—unlike cat pics!');
+    } else if (errorMessage.includes('brightness')) {
+      toast.error('Image too colorful or dark. Aadhaar cards aren’t as vibrant as butter chicken!');
+    } else {
+      toast.error(errorMessage);
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className={styles.pageWrapper}>
@@ -70,12 +83,16 @@ const AadhaarUpload: React.FC = () => {
             <UploadSection
               label="Aadhaar Front"
               preview={frontPreview}
-              onFileChange={(e) => handleFileInput(e, setFrontFile, setFrontPreview)}
+              onFileChange={(e) =>
+                handleFileInput(e, setFrontFile, setFrontPreview)
+              }
             />
             <UploadSection
               label="Aadhaar Back"
               preview={backPreview}
-              onFileChange={(e) => handleFileInput(e, setBackFile, setBackPreview)}
+              onFileChange={(e) =>
+                handleFileInput(e, setBackFile, setBackPreview)
+              }
             />
 
             <button
@@ -83,7 +100,7 @@ const AadhaarUpload: React.FC = () => {
               onClick={handleUpload}
               disabled={loading}
             >
-              {loading ? "Processing..." : "PARSE AADHAAR"}
+              {loading ? "Processing..." : "🚀 Parse Aadhaar"}
             </button>
           </div>
         </div>
@@ -92,7 +109,13 @@ const AadhaarUpload: React.FC = () => {
           <div className={styles.apiResponse}>
             <h3>API RESPONSE</h3>
             {loading ? (
-              <p>"Performing OCR by inputing your Aadhaar front and back"</p>
+              <div className={styles.loadingSection}>
+                <div className={styles.spinner}></div>
+                <div className={styles.loadingText}>
+                  <p>Performing OCR on Aadhaar images...</p>
+                  <p>🔐 Validating Aadhaar number</p>
+                </div>
+              </div>
             ) : data ? (
               <ParsedDataView data={data} />
             ) : (
