@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = `${process.env.BACKEND_URL}`;
 
 export const uploadAadhaar = async (frontFile: File, backFile: File) => {
   const formData = new FormData();
