@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { getScanHistory } from '../../services/historyService';
 import styles from './History.module.css';
+import { ClipLoader } from "react-spinners";
 
 interface Scan {
   _id: string;
@@ -47,9 +48,15 @@ const History: React.FC = () => {
     setSelectedScan(null);
   };
 
-  if (loading) {
-    return <div className={styles.container}>Loading...</div>;
-  }
+if (loading) {
+  return (
+    <div className={styles.container}>
+      <ClipLoader size={60} color="#4f46e5" />
+      <p>Loading, please wait...</p>
+    </div>
+  );
+}
+
 
   return (
     <div className={styles.container}>

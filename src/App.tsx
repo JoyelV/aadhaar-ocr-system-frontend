@@ -11,6 +11,7 @@ import { AuthProvider } from './context/AuthContext';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './components/Dashboard/Dashboard';
 import { ToastContainer } from 'react-toastify';
+import NotFoundPage from './components/PageNotFound/PageNotFound';
 
 const App: React.FC = () => {
   return (
@@ -60,12 +61,12 @@ const App: React.FC = () => {
               }
             />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            {/* Fallback 404 page */}
+            <Route path="*" element={<NotFoundPage/>} />
           </Routes>
-          <ToastContainer aria-label="Toast Notifications" />
+          <ToastContainer position="top-center" autoClose={3000} />
         </div>
       </Router>
-      <ToastContainer position="top-center" autoClose={3000} />
-
     </AuthProvider>
   );
 };
