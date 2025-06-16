@@ -31,49 +31,63 @@ const AadhaarUpload: React.FC = () => {
     setPreview(file ? URL.createObjectURL(file) : null);
   };
 
-const handleUpload = async () => {
-  if (!frontFile || !backFile) {
-    toast.error('Both front and back Aadhaar images needed. No cat selfies or butter chicken, please!');
-    return;
-  }
+  const handleRemove = (
+    setFile: React.Dispatch<React.SetStateAction<File | null>>,
+    setPreview: React.Dispatch<React.SetStateAction<string | null>>,
+    label: string
+  ) => {
+    setFile(null);
+    setPreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev); // Clean up object URL
+      return null;
+    });
+    toast.info(`${label} image removed.`);
+    setData(null); // Clear parsed data since images have changed
+  };
 
-  try {
-    setLoading(true);
-    const result = await uploadAadhaar(frontFile, backFile);
-
-    // Validate response structure
-    if (
-      !result ||
-      typeof result.name !== 'string' ||
-      typeof result.aadhaarNumber !== 'string' ||
-      typeof result.dob !== 'string' ||
-      typeof result.gender !== 'string' ||
-      typeof result.address !== 'string' ||
-      typeof result.pinCode !== 'string'
-    ) {
-      toast.error('Invalid Aadhaar data. Try actual Aadhaar cards, not your dinner plate!');
+  const handleUpload = async () => {
+    if (!frontFile || !backFile) {
+      toast.error('Both front and back Aadhaar images needed. No cat selfies or butter chicken, please!');
       return;
     }
 
-    if (Object.values(result).some(value => value === 'Not Found')) {
-      toast.warn('Clearer Aadhaar images, please—no blurry curry shots!');
-    } else {
-      toast.success('Aadhaar nailed it!!');
+    try {
+      setLoading(true);
+      const result = await uploadAadhaar(frontFile, backFile);
+
+      // Validate response structure
+      if (
+        !result ||
+        typeof result.name !== 'string' ||
+        typeof result.aadhaarNumber !== 'string' ||
+        typeof result.dob !== 'string' ||
+        typeof result.gender !== 'string' ||
+        typeof result.address !== 'string' ||
+        typeof result.pinCode !== 'string'
+      ) {
+        toast.error('Invalid Aadhaar data. Try actual Aadhaar cards, not your dinner plate!');
+        return;
+      }
+
+      if (Object.values(result).some(value => value === 'Not Found')) {
+        toast.warn('Clearer Aadhaar images, please—no blurry curry shots!');
+      } else {
+        toast.success('Aadhaar nailed it!!');
+      }
+      setData(result);
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || 'Processing failed. Upload valid Aadhaar images!';
+      if (errorMessage.includes('QR code')) {
+        toast.error('No QR code found. Aadhaar cards have QR codes—unlike cat pics!');
+      } else if (errorMessage.includes('brightness')) {
+        toast.error('Image too colorful or dark. Aadhaar cards aren’t as vibrant as butter chicken!');
+      } else {
+        toast.error(errorMessage);
+      }
+    } finally {
+      setLoading(false);
     }
-    setData(result);
-  } catch (error: any) {
-    const errorMessage = error?.response?.data?.message || 'Processing failed. Upload valid Aadhaar images!';
-    if (errorMessage.includes('QR code')) {
-      toast.error('No QR code found. Aadhaar cards have QR codes—unlike cat pics!');
-    } else if (errorMessage.includes('brightness')) {
-      toast.error('Image too colorful or dark. Aadhaar cards aren’t as vibrant as butter chicken!');
-    } else {
-      toast.error(errorMessage);
-    }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className={styles.pageWrapper}>
@@ -86,6 +100,7 @@ const handleUpload = async () => {
               onFileChange={(e) =>
                 handleFileInput(e, setFrontFile, setFrontPreview)
               }
+              onRemove={() => handleRemove(setFrontFile, setFrontPreview, "Aadhaar Front")}
             />
             <UploadSection
               label="Aadhaar Back"
@@ -93,6 +108,7 @@ const handleUpload = async () => {
               onFileChange={(e) =>
                 handleFileInput(e, setBackFile, setBackPreview)
               }
+              onRemove={() => handleRemove(setBackFile, setBackPreview, "Aadhaar Back")}
             />
 
             <button
