@@ -47,7 +47,7 @@ const AadhaarUpload: React.FC = () => {
 
   const handleUpload = async () => {
     if (!frontFile || !backFile) {
-      toast.error('Both front and back Aadhaar images needed. No cat selfies or butter chicken, please!');
+      toast.error('Both front and back Aadhaar images needed!');
       return;
     }
 
@@ -65,19 +65,19 @@ const AadhaarUpload: React.FC = () => {
         typeof result.address !== 'string' ||
         typeof result.pinCode !== 'string'
       ) {
-        toast.error('Invalid Aadhaar data. Try actual Aadhaar cards, not your dinner plate!');
+        toast.error('Invalid Aadhaar data. Try actual Aadhaar cards!');
         return;
       }
 
       if (Object.values(result).some(value => value === 'Not Found')) {
-        toast.warn('Clearer Aadhaar images, No Aadhaar cards!');
+        toast.warn('Clearer Aadhaar images, No Aadhaar cards Found!');
       } else {
         toast.success('Aadhaar nailed it!!');
       }
       setData(result);
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || 'Processing failed. Upload valid Aadhaar images!';
-      if (errorMessage.includes('QR code')) {
+      if (errorMessage.includes('Aadhaar cards')) {
         toast.error('No QR code found. Aadhaar cards have QR codes—unlike cat pics!');
       } else if (errorMessage.includes('brightness')) {
         toast.error('Image too colorful or dark. Aadhaar cards aren’t as vibrant as butter chicken!');
