@@ -125,7 +125,8 @@
 .apiResponseWrapper {
   flex: 1;
   min-width: 320px;
-  background: #ffffff;
+  min-height: auto;
+  background: #d8f2bd;
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);

@@ -112,7 +112,7 @@ const handleUpload = async () => {
               <div className={styles.loadingSection}>
                 <div className={styles.spinner}></div>
                 <div className={styles.loadingText}>
-                  <p>Performing OCR on Aadhaar images...</p>
+                  <p>Performing OCR on Aadhaar images..........</p>
                   <p>🔐 Validating Aadhaar number</p>
                 </div>
               </div>
