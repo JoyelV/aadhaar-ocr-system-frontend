@@ -47,17 +47,16 @@ const History: React.FC = () => {
     setSelectedScan(null);
   };
 
-  // New function to handle scan deletion
   const handleDelete = async (scanId: string) => {
     if (!window.confirm('Are you sure you want to delete this scan?')) {
-      return; // Cancel if user does not confirm
+      return;
     }
 
     try {
-      await deleteScan(scanId); // Call delete service
-      setScans(scans.filter((scan) => scan._id !== scanId)); // Remove scan from state
+      await deleteScan(scanId); 
+      setScans(scans.filter((scan) => scan._id !== scanId)); 
       if (selectedScan?._id === scanId) {
-        setSelectedScan(null); // Close modal if the deleted scan is open
+        setSelectedScan(null); 
       }
       toast.success('Scan deleted successfully');
     } catch (error: any) {
