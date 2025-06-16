@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getScanHistory, deleteScan } from '../../services/historyService'; 
+import { getScanHistory, deleteScan } from '../../services/historyService';
 import styles from './History.module.css';
 import { ClipLoader } from 'react-spinners';
 
@@ -23,6 +23,7 @@ const History: React.FC = () => {
   const [scans, setScans] = useState<Scan[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedScan, setSelectedScan] = useState<Scan | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null); // Track deleting scan
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -30,7 +31,7 @@ const History: React.FC = () => {
         const data = await getScanHistory();
         setScans(data);
       } catch (error: any) {
-        toast.error('Failed to load scan history');
+        toast.error(error.message || 'Failed to load scan history');
       } finally {
         setLoading(false);
       }
@@ -53,21 +54,26 @@ const History: React.FC = () => {
     }
 
     try {
-      await deleteScan(scanId); 
-      setScans(scans.filter((scan) => scan._id !== scanId)); 
+      setDeletingId(scanId); // Set loading state for this scan
+      console.log(`Deleting scan with ID: ${scanId}`); // Debug log
+      await deleteScan(scanId);
+      setScans(scans.filter((scan) => scan._id !== scanId));
       if (selectedScan?._id === scanId) {
-        setSelectedScan(null); 
+        setSelectedScan(null);
       }
       toast.success('Scan deleted successfully');
     } catch (error: any) {
-      toast.error('Failed to delete scan');
+      console.error('Delete error:', error);
+      toast.error(error.message || 'Failed to delete scan');
+    } finally {
+      setDeletingId(null); // Reset loading state
     }
   };
 
   if (loading) {
     return (
       <div className={styles.container}>
-        <ClipLoader size={60} color='#4f46e5' />
+        <ClipLoader size={60} color="#4f46e5" />
         <p>Loading, please wait...</p>
       </div>
     );
@@ -96,14 +102,16 @@ const History: React.FC = () => {
                   <button
                     onClick={() => handleView(scan)}
                     className={styles.viewButton}
+                    disabled={deletingId === scan._id}
                   >
                     View
                   </button>
                   <button
-                    onClick={() => handleDelete(scan._id)} // Add delete button
+                    onClick={() => handleDelete(scan._id)}
                     className={styles.deleteButton}
+                    disabled={deletingId === scan._id}
                   >
-                    Delete
+                    {deletingId === scan._id ? <ClipLoader size={20} color="#fff" /> : 'Delete'}
                   </button>
                 </td>
               </tr>
@@ -120,11 +128,11 @@ const History: React.FC = () => {
             <div className={styles.imageContainer}>
               <div>
                 <h4>Front Image</h4>
-                <img src={selectedScan.frontImage} alt='Front' className={styles.image} />
+                <img src={selectedScan.frontImage} alt="Front" className={styles.image} />
               </div>
               <div>
                 <h4>Back Image</h4>
-                <img src={selectedScan.backImage} alt='Back' className={styles.image} />
+                <img src={selectedScan.backImage} alt="Back" className={styles.image} />
               </div>
             </div>
             <div className={styles.details}>
