@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getScanHistory, deleteScan } from '../../services/historyService';
+import { getScanHistory } from '../../services/historyService';
 import styles from './History.module.css';
-import { ClipLoader } from 'react-spinners';
+import { ClipLoader } from "react-spinners";
 
 interface Scan {
   _id: string;
@@ -23,15 +23,15 @@ const History: React.FC = () => {
   const [scans, setScans] = useState<Scan[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedScan, setSelectedScan] = useState<Scan | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null); // Track deleting scan
 
   useEffect(() => {
     const fetchHistory = async () => {
       try {
         const data = await getScanHistory();
+        console.log(data)
         setScans(data);
       } catch (error: any) {
-        toast.error(error.message || 'Failed to load scan history');
+        toast.error('Failed to load scan history');
       } finally {
         setLoading(false);
       }
@@ -48,36 +48,15 @@ const History: React.FC = () => {
     setSelectedScan(null);
   };
 
-  const handleDelete = async (scanId: string) => {
-    if (!window.confirm('Are you sure you want to delete this scan?')) {
-      return;
-    }
+if (loading) {
+  return (
+    <div className={styles.container}>
+      <ClipLoader size={60} color="#4f46e5" />
+      <p>Loading, please wait...</p>
+    </div>
+  );
+}
 
-    try {
-      setDeletingId(scanId); // Set loading state for this scan
-      console.log(`Deleting scan with ID: ${scanId}`); // Debug log
-      await deleteScan(scanId);
-      setScans(scans.filter((scan) => scan._id !== scanId));
-      if (selectedScan?._id === scanId) {
-        setSelectedScan(null);
-      }
-      toast.success('Scan deleted successfully');
-    } catch (error: any) {
-      console.error('Delete error:', error);
-      toast.error(error.message || 'Failed to delete scan');
-    } finally {
-      setDeletingId(null); // Reset loading state
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className={styles.container}>
-        <ClipLoader size={60} color="#4f46e5" />
-        <p>Loading, please wait...</p>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.container}>
@@ -96,22 +75,14 @@ const History: React.FC = () => {
           <tbody>
             {scans.map((scan) => (
               <tr key={scan._id}>
-                <td>{`${scan.parsedData?.name || 'N/A'}`}</td>
+                <td>{`${scan.parsedData?.name}`}</td>
                 <td>{new Date(scan.createdAt).toLocaleString()}</td>
                 <td>
                   <button
                     onClick={() => handleView(scan)}
                     className={styles.viewButton}
-                    disabled={deletingId === scan._id}
                   >
                     View
-                  </button>
-                  <button
-                    onClick={() => handleDelete(scan._id)}
-                    className={styles.deleteButton}
-                    disabled={deletingId === scan._id}
-                  >
-                    {deletingId === scan._id ? <ClipLoader size={20} color="#fff" /> : 'Delete'}
                   </button>
                 </td>
               </tr>
