@@ -5,10 +5,9 @@ interface UploadSectionProps {
   label: string;
   preview: string | null;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onRemove: () => void; 
 }
 
-const UploadSection: React.FC<UploadSectionProps> = ({ label, preview, onFileChange, onRemove }) => {
+const UploadSection: React.FC<UploadSectionProps> = ({ label, preview, onFileChange }) => {
   const inputName = label === 'Aadhaar Front' ? 'front' : 'back';
 
   return (
@@ -24,18 +23,7 @@ const UploadSection: React.FC<UploadSectionProps> = ({ label, preview, onFileCha
           className={styles.fileInput}
         />
       </div>
-      {preview && (
-        <div className={styles.previewContainer}>
-          <img src={preview} alt={`${label} Preview`} className={styles.previewImage} />
-          <button
-            className={styles.removeButton}
-            onClick={onRemove}
-            aria-label={`Remove ${label} image`}
-          >
-            Remove
-          </button>
-        </div>
-      )}
+      {preview && <img src={preview} alt={`${label} Preview`} className={styles.previewImage} />}
     </div>
   );
 };

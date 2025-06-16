@@ -31,20 +31,6 @@ const AadhaarUpload: React.FC = () => {
     setPreview(file ? URL.createObjectURL(file) : null);
   };
 
-  const handleRemove = (
-    setFile: React.Dispatch<React.SetStateAction<File | null>>,
-    setPreview: React.Dispatch<React.SetStateAction<string | null>>,
-    label: string
-  ) => {
-    setFile(null);
-    setPreview((prev) => {
-      if (prev) URL.revokeObjectURL(prev); // Clean up object URL
-      return null;
-    });
-    toast.info(`${label} image removed.`);
-    setData(null); // Clear parsed data since images have changed
-  };
-
 const handleUpload = async () => {
   if (!frontFile || !backFile) {
     toast.error('Both front and back Aadhaar images needed. No cat selfies or butter chicken, please!');
@@ -100,7 +86,6 @@ const handleUpload = async () => {
               onFileChange={(e) =>
                 handleFileInput(e, setFrontFile, setFrontPreview)
               }
-              onRemove={() => handleRemove(setFrontFile, setFrontPreview, "Aadhaar Front")}
             />
             <UploadSection
               label="Aadhaar Back"
@@ -108,7 +93,6 @@ const handleUpload = async () => {
               onFileChange={(e) =>
                 handleFileInput(e, setBackFile, setBackPreview)
               }
-              onRemove={() => handleRemove(setBackFile, setBackPreview, "Aadhaar Back")}
             />
 
             <button
@@ -128,7 +112,7 @@ const handleUpload = async () => {
               <div className={styles.loadingSection}>
                 <div className={styles.spinner}></div>
                 <div className={styles.loadingText}>
-                  <p>Performing OCR on Aadhaar images..........</p>
+                  <p>Performing OCR on Aadhaar images...</p>
                   <p>🔐 Validating Aadhaar number</p>
                 </div>
               </div>
