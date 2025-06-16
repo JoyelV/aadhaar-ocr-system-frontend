@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getScanHistory } from '../../services/historyService';
+import { getScanHistory, deleteScan } from '../../services/historyService'; 
 import styles from './History.module.css';
-import { ClipLoader } from "react-spinners";
+import { ClipLoader } from 'react-spinners';
 
 interface Scan {
   _id: string;
@@ -28,7 +28,6 @@ const History: React.FC = () => {
     const fetchHistory = async () => {
       try {
         const data = await getScanHistory();
-        console.log(data)
         setScans(data);
       } catch (error: any) {
         toast.error('Failed to load scan history');
@@ -48,15 +47,32 @@ const History: React.FC = () => {
     setSelectedScan(null);
   };
 
-if (loading) {
-  return (
-    <div className={styles.container}>
-      <ClipLoader size={60} color="#4f46e5" />
-      <p>Loading, please wait...</p>
-    </div>
-  );
-}
+  // New function to handle scan deletion
+  const handleDelete = async (scanId: string) => {
+    if (!window.confirm('Are you sure you want to delete this scan?')) {
+      return; // Cancel if user does not confirm
+    }
 
+    try {
+      await deleteScan(scanId); // Call delete service
+      setScans(scans.filter((scan) => scan._id !== scanId)); // Remove scan from state
+      if (selectedScan?._id === scanId) {
+        setSelectedScan(null); // Close modal if the deleted scan is open
+      }
+      toast.success('Scan deleted successfully');
+    } catch (error: any) {
+      toast.error('Failed to delete scan');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <ClipLoader size={60} color='#4f46e5' />
+        <p>Loading, please wait...</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -75,7 +91,7 @@ if (loading) {
           <tbody>
             {scans.map((scan) => (
               <tr key={scan._id}>
-                <td>{`${scan.parsedData?.name}`}</td>
+                <td>{`${scan.parsedData?.name || 'N/A'}`}</td>
                 <td>{new Date(scan.createdAt).toLocaleString()}</td>
                 <td>
                   <button
@@ -83,6 +99,12 @@ if (loading) {
                     className={styles.viewButton}
                   >
                     View
+                  </button>
+                  <button
+                    onClick={() => handleDelete(scan._id)} // Add delete button
+                    className={styles.deleteButton}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -99,11 +121,11 @@ if (loading) {
             <div className={styles.imageContainer}>
               <div>
                 <h4>Front Image</h4>
-                <img src={selectedScan.frontImage} alt="Front" className={styles.image} />
+                <img src={selectedScan.frontImage} alt='Front' className={styles.image} />
               </div>
               <div>
                 <h4>Back Image</h4>
-                <img src={selectedScan.backImage} alt="Back" className={styles.image} />
+                <img src={selectedScan.backImage} alt='Back' className={styles.image} />
               </div>
             </div>
             <div className={styles.details}>

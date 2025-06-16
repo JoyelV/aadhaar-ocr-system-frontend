@@ -13,3 +13,20 @@ export const getScanHistory = async () => {
   
   return response.data;
 };
+
+// New function to delete a scan
+export const deleteScan = async (scanId: string) => {
+  const token = localStorage.getItem('token');
+  
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
+  const response = await axios.delete(`${API_URL}/scans/${scanId}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  
+  return response.data;
+};
