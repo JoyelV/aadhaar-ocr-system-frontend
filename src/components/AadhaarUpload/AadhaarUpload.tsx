@@ -70,7 +70,7 @@ const AadhaarUpload: React.FC = () => {
       }
 
       if (Object.values(result).some(value => value === 'Not Found')) {
-        toast.warn('Clearer Aadhaar images, please—no blurry curry shots!');
+        toast.warn('Clearer Aadhaar images, No Aadhaar cards!');
       } else {
         toast.success('Aadhaar nailed it!!');
       }
