@@ -14,10 +14,10 @@ export const getScanHistory = async () => {
   return response.data;
 };
 
-// New function to delete a scan
 export const deleteScan = async (scanId: string) => {
   const token = localStorage.getItem('token');
-  
+  console.log(token,"token");
+
   if (!token) {
     throw new Error('No authentication token found');
   }
@@ -27,6 +27,6 @@ export const deleteScan = async (scanId: string) => {
       'Authorization': `Bearer ${token}`
     }
   });
-  
+  console.log(response,"response");
   return response.data;
 };
