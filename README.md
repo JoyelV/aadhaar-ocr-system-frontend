@@ -1,64 +1,52 @@
-# Aadhaar OCR System
+### Frontend README (`frontend/README.md`)
 
-This application allows users to upload Aadhaar card images (front and back), parse the text using OCR, and display the extracted information. The frontend is built with **React**, **TypeScript**, and **Tailwind CSS**, while the backend uses **Node.js**, **Express.js**, and **MongoDB** for storing and processing data.
+```markdown
+# Aadhaar OCR System - Frontend
+
+This is the frontend of the Aadhaar OCR System, built with **React**, **TypeScript**, and **Tailwind CSS**. It provides a responsive UI for users to upload Aadhaar card images (front and back), view parsed data, and access scan history. The frontend communicates with the backend API for OCR processing and data storage.
 
 ## Features
-- Upload Aadhaar card images (front and back).
-- Perform OCR to extract text from the images.
-- Display parsed data, such as the address after "SIO".
-- Responsive UI with a side-by-side layout: upload section on the left, parsed data on the right.
-- Backend API to handle image uploads and OCR processing.
-- Data persistence using MongoDB.
+- Upload Aadhaar card images (front and back) via a user-friendly interface.
+- Display parsed Aadhaar data (e.g., name, Aadhaar number, DOB, gender, address, pin code).
+- View scan history for authenticated users.
+- Responsive layout with side-by-side sections for upload and results.
+- Error notifications using `react-toastify`.
+- Authentication support for secure access.
 
 ## Tech Stack
-- **Frontend**: React, TypeScript, Tailwind CSS
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB
-- **Other Libraries**:
+- **Framework**: React
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Libraries**:
   - `react-toastify` for notifications
   - `react-icons` for icons (e.g., upload icon)
+  - `axios` for API requests
 
 ## Prerequisites
-Before setting up the project, ensure you have the following installed:
 - **Node.js** (v16 or higher)
 - **npm** (v8 or higher) or **yarn**
-- **MongoDB** (local installation or a cloud instance like MongoDB Atlas)
 - **Git** (to clone the repository)
+- Backend API running (see [Backend README](../server/README.md))
 
 ## Project Structure
 ```
-aadhaar-ocr-system/
-├── client/                     # Frontend (React, TypeScript, Tailwind CSS)
-│   ├── src/
-│   │   ├── components/         # React components (e.g., UploadSection, ParsedDataView)
-│   │   │   ├── AadhaarUpload/
-│   │   │   │   ├── AadhaarUpload.tsx
-│   │   │   │   ├── ParsedDataView.tsx
-│   │   │   │   └── AadhaarUpload.module.css
-│   │   │   └── UploadSection.tsx
-│   │   ├── services/           # API service functions (e.g., orcService.ts)
-│   │   ├── types/              # TypeScript type definitions (e.g., Aadhaar.ts)
-│   │   ├── utils/              # Utility functions (e.g., fileValidator.ts, constants.ts)
-│   │   ├── App.tsx
-│   │   ├── index.tsx
-│   │   └── tailwind.css        # Tailwind CSS configuration
-│   ├── public/
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── tailwind.config.js
-├── server/                     # Backend (Node.js, Express.js, MongoDB)
-│   ├── src/
-│   │   ├── controllers/        # Request handlers (e.g., ocrController.ts)
-│   │   ├── models/             # Mongoose models (e.g., Aadhaar.ts)
-│   │   ├── routes/             # API routes (e.g., ocrRoutes.ts)
-│   │   ├── middleware/         # Middleware (e.g., fileUpload.ts)
-│   │   ├── utils/              # Utility functions (e.g., ocrProcessor.ts)
-│   │   ├── app.ts              # Express app setup
-│   │   └── server.ts           # Entry point for the server
-│   ├── package.json
-│   └── tsconfig.json
-├── README.md                   # Project documentation
-└── .gitignore
+frontend/
+├── public/                    # Static assets
+├── src/
+│   ├── components/            # Reusable React components (e.g., UploadForm, ResultDisplay)
+│   ├── context/               # React context for global state (e.g., auth, scan data)
+│   ├── services/              # API service functions (e.g., uploadAadhaar, getHistory)
+│   ├── types/                 # TypeScript interfaces (e.g., AadhaarDetails)
+│   ├── utils/                 # Utility functions
+│   ├── App.tsx                # Main app component
+│   ├── index.tsx              # Entry point
+│   ├── App.module.css         # Component-specific styles
+│   ├── index.css              # Global styles (Tailwind CSS)
+│   └── global.d.ts            # Global TypeScript declarations
+├── tailwind.config.js         # Tailwind CSS configuration
+├── tsconfig.json              # TypeScript configuration
+├── .env                       # Environment variables
+└── package.json               # Dependencies and scripts
 ```
 
 ## Setup Instructions
@@ -66,45 +54,24 @@ aadhaar-ocr-system/
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/JoyelV/aadhaar-ocr-system-frontend.git
-cd aadhaar-ocr-system
+cd aadhaar-ocr-system/frontend
 ```
 
-### 2. Backend Setup (`server/`)
-
-#### Install Dependencies
+### 2. Install Dependencies
 ```bash
-cd server
 npm install
 ```
 
-#### Configure Environment Variables
-Create a `.env` file in the `server/` directory and add the following:
+### 3. Configure Environment Variables
+Create a `.env` file in the `frontend/` directory:
+```env
+REACT_APP_API_URL=http://localhost:5000/api
 ```
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/aadhaar-ocr-system
-# Add any OCR API keys or other secrets here if needed
-```
+> Replace `REACT_APP_API_URL` with the deployed backend URL if applicable.
 
-- Replace `MONGODB_URI` with your MongoDB connection string (e.g., from MongoDB Atlas if using the cloud version).
-- Ensure MongoDB is running locally (`mongod`) or accessible via the URI.
-
-#### Run the Backend
-```bash
-npm run dev
-```
-The backend server will start on `http://localhost:5000`.
-
-### 3. Frontend Setup (`client/`)
-
-#### Install Dependencies
-```bash
-cd client
-npm install
-```
-
-#### Configure Tailwind CSS
-Ensure Tailwind CSS is set up correctly. The `tailwind.config.js` should look like this:
-```js
+### 4. Tailwind CSS Configuration
+Ensure `tailwind.config.js` is set up:
+```javascript
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -117,77 +84,63 @@ module.exports = {
 }
 ```
 
-The `client/src/tailwind.css` file should include:
+And include Tailwind in `src/index.css`:
 ```css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 ```
 
-#### Run the Frontend
+### 5. Run the Frontend
 ```bash
 npm start
 ```
-The React app will start on `http://localhost:3000`.
+The frontend will run at [http://localhost:3000](http://localhost:3000).
 
-### 4. Test the Application
-- Open `http://localhost:3000` in your browser.
-- Upload Aadhaar card images (front and back) using the upload section on the left.
-- Click "PARSE AADHAAR" to process the images.
-- View the parsed data (e.g., address after "SIO") on the right side under "API RESPONSE".
+## Usage
+1. **Login**: Authenticate using the login form (via `/api/auth/login`).
+2. **Upload Aadhaar Cards**: Use the upload form to submit front and back images.
+3. **View Results**: Parsed data (e.g., address, Aadhaar number) is displayed on the right.
+4. **View History**: Access past scans via the history page (fetches from `/api/history/scans`).
 
-## API Endpoints
-The backend provides the following API endpoints:
+## API Integration
+The frontend interacts with the backend API:
+- **POST /api/aadhaar/upload**: Uploads Aadhaar images for OCR processing.
+- **GET /api/history/scans**: Retrieves scan history for the authenticated user.
+- **POST /api/auth/login**: Authenticates users.
 
-- **POST `/api/ocr/upload`**
-  - Upload Aadhaar card images and process them via OCR.
-  - Request: `multipart/form-data` with `front` and `back` fields for the images.
-  - Response: JSON object with parsed data (e.g., `{ address: "..." }`).
-
-Example request using `curl`:
-```bash
-curl -X POST http://localhost:5000/api/ocr/upload \
-  -F "front=@/path/to/front-image.jpg" \
-  -F "back=@/path/to/back-image.jpg"
-```
+Ensure the backend is running and `REACT_APP_API_URL` points to the correct API endpoint.
 
 ## Deployment
-
-### Deploy to Vercel (Frontend)
-1. Push your code to a GitHub repository.
-2. Log in to Vercel, import your repository, and configure the project settings:
-   - Set the root directory to `client/`.
-   - Framework preset: React.
-   - Build command: `npm run build`.
-   - Output directory: `build`.
-3. Deploy the app. Vercel will automatically deploy on every push to the `main` branch.
-
-### Deploy Backend (on Render)
-1. Push the `server/` directory to a separate Git repository.
-2. On Render/Heroku:
-   - Set up a new app and link your repository.
-   - Add environment variables (e.g., `MONGODB_URI`, `PORT`).
-   - Deploy the app.
-3. Update the frontend (`client/src/services/orcService.ts`) to point to your backend URL (e.g., `https://aadhaar-ocr-backend-g1c6.onrender.com`).
+### Vercel
+1. Push the `frontend/` directory to a GitHub repository.
+2. Import the repository in [Vercel](https://vercel.com).
+3. Set the root directory to `frontend/`.
+4. Configure environment variables (e.g., `REACT_APP_API_URL`).
+5. Build command: `npm run build`
+6. Output directory: `build`
+7. Deploy the application.
 
 ## Development Notes
-- **OCR Processing**: The backend currently assumes an OCR service (e.g., a custom implementation or third-party API like Tesseract.js). You’ll need to implement or integrate an OCR library in `server/src/utils/ocrProcessor.ts`.
-- **MongoDB Schema**: The `Aadhaar` model in `server/src/models/Aadhaar.ts` should define the structure of the parsed data (e.g., `{ address: String }`).
-- **Error Handling**: The frontend uses `react-toastify` for error notifications (e.g., "Upload both front and back images").
-- **File Validation**: The `validateFile` utility in `client/src/utils/fileValidator.ts` ensures only valid image files are uploaded.
+- **State Management**: Uses React Context for global state (e.g., user authentication, scan data).
+- **Error Handling**: Displays user-friendly errors via `react-toastify`.
+- **Type Safety**: TypeScript ensures type-safe API calls and component props.
 
 ## Future Improvements
-- Add user authentication to secure the application.
-- Improve OCR accuracy with better preprocessing of images.
-- Add support for more Aadhaar card fields (e.g., name, Aadhaar number).
-- Implement caching for faster API responses.
+- Add support for multiple languages in the UI.
+- Enhance UI/UX with animations or loading states.
+- Implement offline capabilities for temporary data storage.
+- Add form validation for file uploads (e.g., size, type).
 
 ## Contributing
 1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/your-feature`).
-3. Commit your changes (`git commit -m "Add your feature"`).
-4. Push to the branch (`git push origin feature/your-feature`).
-5. Open a pull request.
+2. Create a feature branch (`git checkout -b feat/feature-name`).
+3. Commit changes (`git commit -m 'Add feature'`).
+4. Push to the branch (`git push origin feat/feature-name`).
+5. Create a Pull Request.
 
 ## License
-This project is licensed under the MIT License.
+Licensed under the [MIT License](LICENSE).
+```
+
+---
