@@ -27,7 +27,6 @@ This is the frontend of the Aadhaar OCR System, built with React, TypeScript, an
 
 ## Project Structure
 ```
-```
 frontend/
 ├── public/                    # Static assets
 ├── src/
@@ -46,7 +45,7 @@ frontend/
 ├── .env                       # Environment variables
 └── package.json               # Dependencies and scripts
 ```
-```
+
 ## Setup Instructions
 
 ### 1. Clone the Repository
@@ -140,5 +139,3 @@ Ensure the backend is running and `REACT_APP_API_URL` points to the correct API 
 ## License
 Licensed under the [MIT License](LICENSE).
 ```
-
----
