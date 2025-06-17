@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { getScanHistory } from '../../services/historyService';
 import styles from './History.module.css';
-import { ClipLoader } from "react-spinners";
+import { ClipLoader } from 'react-spinners';
 
 interface Scan {
   _id: string;
@@ -23,12 +23,12 @@ const History: React.FC = () => {
   const [scans, setScans] = useState<Scan[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedScan, setSelectedScan] = useState<Scan | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchHistory = async () => {
       try {
         const data = await getScanHistory();
-        console.log(data)
         setScans(data);
       } catch (error: any) {
         toast.error('Failed to load scan history');
@@ -40,47 +40,65 @@ const History: React.FC = () => {
     fetchHistory();
   }, []);
 
-  const handleView = (scan: Scan) => {
+  const handleView = useCallback((scan: Scan) => {
     setSelectedScan(scan);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setSelectedScan(null);
-  };
+  }, []);
 
-if (loading) {
+  // Focus trap for modal
+  useEffect(() => {
+    if (selectedScan && modalRef.current) {
+      const focusable = modalRef.current.querySelectorAll('button, img');
+      const first = focusable[0] as HTMLElement;
+      first?.focus();
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          closeModal();
+        }
+      };
+
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [selectedScan, closeModal]);
+
+  if (loading) {
+    return (
+      <main className={styles.container} aria-busy="true">
+        <ClipLoader size={60} color="#4f46e5" />
+        <p>Loading, please wait...</p>
+      </main>
+    );
+  }
+
   return (
-    <div className={styles.container}>
-      <ClipLoader size={60} color="#4f46e5" />
-      <p>Loading, please wait...</p>
-    </div>
-  );
-}
-
-
-  return (
-    <div className={styles.container}>
+    <main className={styles.container}>
       <h2>Scan History</h2>
       {scans.length === 0 ? (
         <p>No scans found.</p>
       ) : (
-        <table className={styles.table}>
+        <table className={styles.table} aria-label="Scan history table">
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Date</th>
-              <th>Action</th>
+              <th scope="col">Title</th>
+              <th scope="col">Date</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
             {scans.map((scan) => (
               <tr key={scan._id}>
-                <td>{`${scan.parsedData?.name}`}</td>
-                <td>{new Date(scan.createdAt).toLocaleString()}</td>
-                <td>
+                <td data-label="Title">{scan.parsedData?.name || 'N/A'}</td>
+                <td data-label="Date">{new Date(scan.createdAt).toLocaleString()}</td>
+                <td data-label="Action">
                   <button
                     onClick={() => handleView(scan)}
                     className={styles.viewButton}
+                    aria-label={`View details for ${scan.parsedData?.name || 'scan'}`}
                   >
                     View
                   </button>
@@ -92,18 +110,34 @@ if (loading) {
       )}
 
       {selectedScan && (
-        <div className={styles.modal}>
+        <div className={styles.modal} role="dialog" aria-modal="true" ref={modalRef}>
           <div className={styles.modalContent}>
             <h3>Scan Details</h3>
-            <button onClick={closeModal} className={styles.closeButton}>Close</button>
+            <button
+              onClick={closeModal}
+              className={styles.closeButton}
+              aria-label="Close modal"
+            >
+              Close
+            </button>
             <div className={styles.imageContainer}>
               <div>
                 <h4>Front Image</h4>
-                <img src={selectedScan.frontImage} alt="Front" className={styles.image} />
+                <img
+                  src={selectedScan.frontImage}
+                  alt="Aadhaar front"
+                  className={styles.image}
+                  loading="lazy"
+                />
               </div>
               <div>
                 <h4>Back Image</h4>
-                <img src={selectedScan.backImage} alt="Back" className={styles.image} />
+                <img
+                  src={selectedScan.backImage}
+                  alt="Aadhaar back"
+                  className={styles.image}
+                  loading="lazy"
+                />
               </div>
             </div>
             <div className={styles.details}>
@@ -112,18 +146,28 @@ if (loading) {
                 <p className={styles.error}>{selectedScan.parsedData.error}</p>
               ) : (
                 <>
-                  <p><strong>Aadhaar Number:</strong> {selectedScan.parsedData.aadhaarNumber || 'N/A'}</p>
-                  <p><strong>Name:</strong> {selectedScan.parsedData.name || 'N/A'}</p>
-                  <p><strong>Date of Birth:</strong> {selectedScan.parsedData.dob || 'N/A'}</p>
-                  <p><strong>Gender:</strong> {selectedScan.parsedData.gender || 'N/A'}</p>
-                  <p><strong>Address:</strong> {selectedScan.parsedData.address || 'N/A'}</p>
+                  <p>
+                    <strong>Aadhaar Number:</strong> {selectedScan.parsedData.aadhaarNumber || 'N/A'}
+                  </p>
+                  <p>
+                    <strong>Name:</strong> {selectedScan.parsedData.name || 'N/A'}
+                  </p>
+                  <p>
+                    <strong>Date of Birth:</strong> {selectedScan.parsedData.dob || 'N/A'}
+                  </p>
+                  <p>
+                    <strong>Gender:</strong> {selectedScan.parsedData.gender || 'N/A'}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {selectedScan.parsedData.address || 'N/A'}
+                  </p>
                 </>
               )}
             </div>
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

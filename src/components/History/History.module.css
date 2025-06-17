@@ -1,7 +1,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: clamp(1rem, 3vw, 1.5rem); /* Responsive padding */
 }
 
 .table {
@@ -9,13 +9,15 @@
   border-collapse: collapse;
   background: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
 }
 
 .table th,
 .table td {
-  padding: 1rem;
+  padding: clamp(0.5rem, 2vw, 0.75rem);
   text-align: left;
   border-bottom: 1px solid #ddd;
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
 }
 
 .table th {
@@ -27,14 +29,37 @@
   background: #1877f2;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.2s;
+  font-size: clamp(0.8rem, 2vw, 0.85rem);
 }
 
-.viewButton:hover {
+.viewButton:hover,
+.viewButton:focus {
   background: #166fe5;
+  outline: 2px solid #1877f2;
+  outline-offset: 2px;
+}
+
+.deleteButton {
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: clamp(0.8rem, 2vw, 0.85rem);
+  margin-left: 0.5rem;
+}
+
+.deleteButton:hover,
+.deleteButton:focus {
+  background: #d9363e;
+  outline: 2px solid #ff4d4f;
+  outline-offset: 2px;
 }
 
 .modal {
@@ -52,74 +77,137 @@
 
 .modalContent {
   background: white;
-  padding: 2rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
   border-radius: 8px;
-  max-width: 800px;
-  width: 90%;
-  max-height: 80vh;
+  max-width: 90%;
+  width: 100%;
+  max-height: 85vh;
   overflow-y: auto;
   position: relative;
 }
 
 .closeButton {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0.5rem;
+  right: 0.5rem;
   background: #ff4444;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
   border-radius: 4px;
   cursor: pointer;
+  font-size: clamp(0.8rem, 2vw, 0.85rem);
 }
 
-.closeButton:hover {
+.closeButton:hover,
+.closeButton:focus {
   background: #cc0000;
+  outline: 2px solid #ff4444;
+  outline-offset: 2px;
 }
 
 .imageContainer {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  flex-direction: column; /* Stack images by default for mobile */
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .image {
-  max-width: 300px;
+  max-width: 100%;
+  width: clamp(150px, 45vw, 200px); /* Responsive image size */
   height: auto;
   border-radius: 4px;
 }
 
 .details {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .details h4 {
-  margin: 0.5rem 0;
+  margin: clamp(0.4rem, 1.5vw, 0.5rem) 0;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
 }
 
 .details p {
-  margin: 0.5rem 0;
+  margin: clamp(0.4rem, 1.5vw, 0.5rem) 0;
   white-space: pre-wrap;
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
 }
 
-/* Existing styles remain unchanged */
 .error {
   color: #ff4444;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.8rem);
 }
 
-.deleteButton {
-  margin-left: 8px;
-  padding: 6px 12px;
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
+/* Mobile-specific adjustments */
+@media (min-width: 768px) {
+  .imageContainer {
+    flex-direction: row; /* Horizontal layout for larger screens */
+  }
 }
 
-.deleteButton:hover {
-  background-color: #d9363e;
+@media (max-width: 768px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .table {
+    display: block; /* Convert table to card layout */
+  }
+
+  .table thead {
+    display: none; /* Hide headers on mobile */
+  }
+
+  .table tbody,
+  .table tr {
+    display: block;
+  }
+
+  .table tr {
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border: none;
+    font-size: clamp(0.8rem, 2.5vw, 0.85rem);
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #1f2937;
+    flex: 1;
+  }
+
+  .table td:last-child {
+    justify-content: flex-start;
+  }
+
+  .modalContent {
+    width: 95%;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .table td {
+    font-size: clamp(0.75rem, 2.5vw, 0.8rem);
+  }
+
+  .image {
+    width: clamp(120px, 40vw, 150px);
+  }
 }
