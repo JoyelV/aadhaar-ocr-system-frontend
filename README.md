@@ -1,9 +1,6 @@
-### Frontend README (`frontend/README.md`)
-
-```markdown
 # Aadhaar OCR System - Frontend
 
-This is the frontend of the Aadhaar OCR System, built with **React**, **TypeScript**, and **Tailwind CSS**. It provides a responsive UI for users to upload Aadhaar card images (front and back), view parsed data, and access scan history. The frontend communicates with the backend API for OCR processing and data storage.
+This is the frontend of the Aadhaar OCR System, built with React, TypeScript, and Tailwind CSS. It provides a responsive UI for users to upload Aadhaar card images (front and back), view parsed data, and access scan history. The frontend communicates with the backend API for OCR processing and data storage.
 
 ## Features
 - Upload Aadhaar card images (front and back) via a user-friendly interface.
@@ -30,6 +27,7 @@ This is the frontend of the Aadhaar OCR System, built with **React**, **TypeScri
 
 ## Project Structure
 ```
+```
 frontend/
 ├── public/                    # Static assets
 ├── src/
@@ -48,7 +46,7 @@ frontend/
 ├── .env                       # Environment variables
 └── package.json               # Dependencies and scripts
 ```
-
+```
 ## Setup Instructions
 
 ### 1. Clone the Repository
