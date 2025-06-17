@@ -1,50 +1,51 @@
+/* Base styles */
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem; /* Reduced padding for mobile */
   background: #f9fafb;
-  min-height: calc(100vh - 64px); /* Adjust for navbar height */
+  min-height: calc(100vh - 64px);
 }
 
 .header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem; /* Reduced for mobile */
   animation: fadeIn 1s ease-in;
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: clamp(1.8rem, 5vw, 2.2rem); /* Responsive font size */
   font-weight: bold;
   color: #1f2937;
   margin-bottom: 0.5rem;
 }
 
 .subtitle {
-  font-size: 1.125rem;
+  font-size: clamp(0.9rem, 3vw, 1rem); /* Responsive font size */
   color: #6b7280;
 }
 
 .section {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem; /* Reduced for mobile */
 }
 
 .sectionTitle {
-  font-size: 1.875rem;
+  font-size: clamp(1.5rem, 4vw, 1.75rem); /* Responsive font size */
   font-weight: bold;
   color: #1f2937;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
 .stepsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller min width */
+  gap: 1rem; /* Reduced gap for mobile */
 }
 
 .stepCard {
   background: white;
-  padding: 1.5rem;
+  padding: 1rem; /* Reduced padding */
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -56,35 +57,37 @@
 }
 
 .stepIcon {
-  font-size: 2.5rem;
+  font-size: 2rem; /* Slightly smaller */
   color: #3b82f6;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .stepTitle {
-  font-size: 1.25rem;
+  font-size: clamp(1.1rem, 3vw, 1.2rem);
   font-weight: bold;
   color: #1f2937;
   margin-bottom: 0.5rem;
 }
 
 .stepDescription {
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
   color: #6b7280;
 }
 
 .scansGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusted min width */
+  gap: 1rem;
 }
 
 .scanCard {
   background: white;
-  padding: 1rem;
+  padding: 0.75rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
-  gap: 1rem;
+  flex-direction: column; /* Stack vertically on mobile */
+  gap: 0.75rem;
   transition: transform 0.3s ease;
 }
 
@@ -93,7 +96,8 @@
 }
 
 .scanImage {
-  width: 100px;
+  width: 100%;
+  max-width: 80px; /* Smaller for mobile */
   height: auto;
   border-radius: 4px;
   object-fit: cover;
@@ -104,14 +108,14 @@
 }
 
 .scanTitle {
-  font-size: 1.125rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   font-weight: bold;
   color: #1f2937;
   margin-bottom: 0.25rem;
 }
 
 .scanDate {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.8rem);
   color: #6b7280;
   margin-bottom: 0.5rem;
 }
@@ -120,32 +124,32 @@
   color: #3b82f6;
   text-decoration: none;
   font-weight: bold;
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
 }
 
 .viewLink:hover {
   text-decoration: underline;
 }
 
-.loading {
-  text-align: center;
-  color: #6b7280;
-  font-size: 1.125rem;
+.viewLink:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
+.loading,
 .noScans {
   text-align: center;
   color: #6b7280;
-  font-size: 1.125rem;
+  font-size: clamp(0.9rem, 3vw, 1rem);
 }
 
-/* Existing styles remain unchanged */
 .error {
   color: #ef4444;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.8rem);
 }
 
 .scanDetails p {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.8rem);
   color: #6b7280;
   margin: 0.25rem 0;
 }
@@ -157,4 +161,56 @@
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    margin-bottom: 1.5rem;
+  }
+
+  .stepsGrid {
+    grid-template-columns: 1fr; /* Stack cards vertically */
+    gap: 0.75rem;
+  }
+
+  .stepCard {
+    padding: 0.75rem;
+  }
+
+  .scansGrid {
+    grid-template-columns: 1fr; /* Stack cards vertically */
+    gap: 0.75rem;
+  }
+
+  .scanCard {
+    flex-direction: column; /* Ensure vertical stacking */
+    padding: 0.5rem;
+  }
+
+  .scanImage {
+    max-width: 100px; /* Slightly larger for visibility */
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .title {
+    font-size: clamp(1.5rem, 6vw, 1.8rem);
+  }
+
+  .subtitle {
+    font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+  }
+
+  .sectionTitle {
+    font-size: clamp(1.3rem, 5vw, 1.5rem);
+  }
 }

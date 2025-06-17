@@ -1,7 +1,10 @@
 .nav {
   background: linear-gradient(to right, #1e3a8a, #3b82f6);
-  padding: 1rem;
+  padding: clamp(0.75rem, 2vw, 1rem); /* Responsive padding */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky; /* Keep navbar fixed on scroll */
+  top: 0;
+  z-index: 1000;
 }
 
 .navContainer {
@@ -10,48 +13,117 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 clamp(0.5rem, 2vw, 1rem);
 }
 
 .logo {
   color: white;
-  font-size: 1.75rem;
+  font-size: clamp(1.25rem, 4vw, 1.5rem); /* Responsive font size */
   font-weight: bold;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
-.logo:hover {
+.logo:hover,
+.logo:focus {
   color: #e5e7eb;
+  outline: none;
 }
 
 .navLinks {
   display: flex;
-  gap: 1rem;
+  gap: clamp(0.5rem, 2vw, 0.75rem); /* Responsive gap */
   align-items: center;
 }
 
 .navLink {
   color: white;
   text-decoration: none;
-  padding: 0.5rem 1rem;
+  padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
   border-radius: 4px;
   transition: background 0.3s ease;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
-.navLink:hover {
+.navLink:hover,
+.navLink:focus {
   background: rgba(255, 255, 255, 0.1);
+  outline: 2px solid #e5e7eb;
+  outline-offset: 2px;
 }
 
 .logoutButton {
   background: #ef4444;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s ease;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
-.logoutButton:hover {
+.logoutButton:hover,
+.logoutButton:focus {
   background: #dc2626;
+  outline: 2px solid #e5e7eb;
+  outline-offset: 2px;
+}
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: clamp(1.5rem, 4vw, 1.75rem);
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.hamburger:focus {
+  outline: 2px solid #e5e7eb;
+  outline-offset: 2px;
+}
+
+/* Mobile menu styles */
+.mobileMenu {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: #1e3a8a; /* Match navbar gradient start */
+  padding: 1rem;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mobileMenu.open {
+  display: flex;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .navLinks {
+    display: none; /* Hide links by default */
+  }
+
+  .hamburger {
+    display: block; /* Show hamburger icon */
+  }
+
+  .navContainer {
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: clamp(1rem, 5vw, 1.25rem);
+  }
+
+  .hamburger {
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+  }
 }
